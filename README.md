@@ -14,11 +14,12 @@ Bu proje, Oxford-IIIT Pet Dataset kullanılarak eğitilmiş bir derin öğrenme 
    pip install -r requirements.txt
    ```
 2. Oxford-IIIT Pet Dataset'i ve modeli (oxford_pets_model.h5) oluşturun veya eğitin. (Veri ve model dosyaları repoya dahil değildir.)
-3. Sunucuyu başlatın:
+3. Dataset:https://www.robots.ox.ac.uk/%7Evgg/data/pets/
+4. Sunucuyu başlatın:
    ```bash
    python app.py
    ```
-4. Tarayıcıda `http://127.0.0.1:5000` adresine gidin.
+5. Tarayıcıda `http://127.0.0.1:5000` adresine gidin.
 
 ## Kullanım
 - Ana sayfada evcil hayvan fotoğrafı yükleyin.
