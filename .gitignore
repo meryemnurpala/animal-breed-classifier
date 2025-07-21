@@ -1,0 +1,8 @@
+# Data ve model dosyalarını hariç tut
+/data/
+*.h5
+*.keras
+*.ckpt
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store 

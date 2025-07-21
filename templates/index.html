@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evcil Hayvan Cinsi Tespit Uygulaması</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('static/pets.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+        }
+        
+        .overlay {
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .upload-area {
+            border: 3px dashed rgba(46, 125, 50, 0.7);
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .upload-area:hover {
+            border-color: rgba(27, 94, 32, 0.9);
+            transform: scale(1.01);
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-primary {
+            background-color: rgba(46, 125, 50, 0.85);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(46, 125, 50, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background-color: rgba(27, 94, 32, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+        
+        .result-card {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .emoji {
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .progress-bar {
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(90deg, rgba(46, 125, 50, 0.9), rgba(129, 199, 132, 0.8));
+        }
+        
+        .card-header {
+            background-color: rgba(46, 125, 50, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .result-item {
+            background-color: rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .text-shadow {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-footer {
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="header-footer shadow-md py-4">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <div class="flex items-center">
+                    <span class="emoji mr-2">🐾</span>
+                    <h1 class="text-2xl font-bold text-green-900 text-shadow">Evcil Hayvan Cinsi Tespit</h1>
+                </div>
+                <div class="flex space-x-2">
+                    <span class="emoji">🐶</span>
+                    <span class="emoji" style="animation-delay: 0.3s">🐱</span>
+                    <span class="emoji" style="animation-delay: 0.6s">🐰</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <!-- Upload Section (Initial View) -->
+            <div id="upload-section" class="overlay rounded-xl p-8 max-w-3xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-green-900 mb-4 text-shadow">Evcil Hayvanınızın Cinsini Tespit Edelim</h2>
+                    <p class="text-gray-900 font-medium">Evcil hayvanınızın fotoğrafını yükleyin ve yapay zeka ile cinsini öğrenin!</p>
+                </div>
+                
+                <div class="upload-area rounded-lg p-8 text-center cursor-pointer mb-6">
+                    <input type="file" id="file-input" class="hidden" accept="image/*">
+                    <div class="mb-4">
+                        <span class="emoji text-5xl">📷</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-green-900 mb-2 text-shadow">Fotoğraf Yükle</h3>
+                    <p class="text-gray-900 mb-4 font-medium">Dosyayı sürükleyip bırakın veya tıklayarak seçin</p>
+                    <button onclick="document.getElementById('file-input').click()" class="btn-primary text-white px-6 py-3 rounded-full font-medium">
+                        Dosya Seç
+                    </button>
+                </div>
+                
+                <div class="text-center">
+                    <p class="text-sm text-gray-900 font-medium">Desteklenen formatlar: JPG, PNG, JPEG</p>
+                </div>
+            </div>
+
+            <!-- Results Section (Initially Hidden) -->
+            <div id="results-section" class="overlay rounded-xl p-8 max-w-4xl mx-auto hidden">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <!-- Image Preview -->
+                    <div class="md:w-1/2">
+                        <div class="result-card rounded-lg overflow-hidden">
+                            <div class="p-4 card-header text-white font-medium flex items-center">
+                                <span class="emoji mr-2" style="font-size: 1.5rem;">🔍</span>
+                                Yüklenen Fotoğraf
+                            </div>
+                            <div class="p-4">
+                                <img id="preview-image" class="w-full h-auto rounded-lg shadow-md" src="" alt="Yüklenen hayvan">
+                            </div>
+                            <div class="p-4 border-t border-white border-opacity-20">
+                                <button id="back-button" class="btn-primary text-white px-6 py-3 rounded-full font-medium w-full">
+                                    Yeni Fotoğraf Yükle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Results -->
+                    <div class="md:w-1/2">
+                        <div class="result-card rounded-lg overflow-hidden">
+                            <div class="p-4 card-header text-white font-medium flex items-center">
+                                <span class="emoji mr-2" style="font-size: 1.5rem;">🏆</span>
+                                Tespit Sonuçları
+                            </div>
+                            <div class="p-6">
+                                <div class="mb-6 bg-white bg-opacity-20 p-4 rounded-lg border border-white border-opacity-30">
+                                    <h3 class="text-xl font-bold text-green-900 mb-2 text-shadow">En Olası Cins:</h3>
+                                    <div class="flex items-center">
+                                        <span id="top-breed"></span>
+                                        <span class="emoji ml-2">🐕</span>
+                                    </div>
+                                    <div class="mt-2">
+                                        <div class="flex justify-between text-sm mb-1 text-gray-900 font-medium">
+                                            <span>Eşleşme Oranı:</span>
+                                            <span id="top-percentage"></span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 bg-opacity-50 rounded-full">
+                                            <div id="top-progress" class="progress-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h3 class="text-lg font-bold text-green-900 mb-3 text-shadow">Diğer Olasılıklar:</h3>
+                                <div id="other-results" class="space-y-4">
+                                    <!-- Other results will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="header-footer py-4 mt-auto">
+            <div class="container mx-auto px-4 text-center text-gray-900 font-medium">
+                <p>© 2025 Evcil Hayvan Cinsi Tespit Uygulaması</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // File input handling
+        const fileInput = document.getElementById('file-input');
+        const uploadSection = document.getElementById('upload-section');
+        const resultsSection = document.getElementById('results-section');
+        const previewImage = document.getElementById('preview-image');
+        const backButton = document.getElementById('back-button');
+        
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    previewImage.src = event.target.result;
+                    uploadSection.classList.add('hidden');
+                    resultsSection.classList.remove('hidden');
+                    // Model tahmini için API'ye gönder
+                    processImage(file);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        backButton.addEventListener('click', function() {
+            uploadSection.classList.remove('hidden');
+            resultsSection.classList.add('hidden');
+            fileInput.value = '';
+        });
+        
+        // This function would be used to send the image to your backend
+        function processImage(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('top-breed').textContent = data.topBreed;
+                document.getElementById('top-percentage').textContent = data.topPercentage + '%';
+                document.getElementById('top-progress').style.width = data.topPercentage + '%';
+                const otherResultsContainer = document.getElementById('other-results');
+                otherResultsContainer.innerHTML = '';
+                data.otherResults.forEach(result => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.innerHTML = `
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>${result.breed}</span>
+                            <span>${result.percentage}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full">
+                            <div class="progress-bar" style="width: ${result.percentage}%"></div>
+                        </div>
+                    `;
+                    otherResultsContainer.appendChild(resultItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+        // Make the upload area work with drag and drop
+        const uploadArea = document.querySelector('.upload-area');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            uploadArea.classList.add('bg-green-50', 'bg-opacity-30');
+        }
+        
+        function unhighlight() {
+            uploadArea.classList.remove('bg-green-50', 'bg-opacity-30');
+        }
+        
+        uploadArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'962ad5af179a6960',t:'MTc1MzEwMjMzOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
