@@ -46,6 +46,8 @@ Pet/
 
 ## Örnek Çıktı:
 <img width="1920" height="1200" alt="Ekran görüntüsü 2025-07-21 160229" src="https://github.com/user-attachments/assets/b629b336-18fb-4d17-8032-3fd2271de064" />
+<img width="1920" height="1200" alt="Ekran görüntüsü 2025-07-21 160218" src="https://github.com/user-attachments/assets/eff32c91-198a-4a23-ad1c-7c545f8c4915" />
+
 <img width="1106" height="673" alt="Ekran görüntüsü 2025-07-21 160258" src="https://github.com/user-attachments/assets/8cb53d65-bafe-4fc5-8d0b-fc6f2db54a08" />
 
 
